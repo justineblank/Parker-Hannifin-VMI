@@ -1,4 +1,4 @@
-SOURCES = speedway_embedded_example.cpp
+SOURCES = application.cpp
 FU_SOURCES = fileuploader.cpp
 LIB_DIR = /usr/bin
 MPNJ_LIB_DIR = lib
