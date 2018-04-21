@@ -1,0 +1,7 @@
+{
+	"TxPower": 18,
+	"RxSensativity": 1,
+	"ApiUrl": "http://demo.synogent.com:81/RFIDApplication/API/RFID",
+	"HeartbeatRate": 10000,
+	"Antennas": 1
+}

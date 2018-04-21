@@ -1,0 +1,39 @@
+#!/bin/bash  
+#export LD_LIBRARY_PATH=/cust/lib  
+cd /cust  
+PATH=/usr/bin:/bin:/usr/sbin:/sbin:/opt/ys  
+export PATH  
+TERM=vt100  
+export TERM  
+
+check_process() {
+  
+		if [ "$1" = "" ];
+        then
+                return 0
+        fi
+		
+		echo "$ts: Checking $1"
+
+        PROCESS_NUM=$(ps -ef | grep "$1" | grep -v "grep" | wc -l)
+
+        if [ $PROCESS_NUM -eq 1 ];
+        then
+                return 1
+        else
+                return 0
+        fi
+}
+
+while [ 1 ]; do 
+  # timestamp
+  ts=`date +%T`
+
+  echo "$ts: Beginning process check..."
+  check_process "speedwayr_arm"
+  [ $? -eq 0 ] && echo "$ts: ** Not running, restarting..." && `/cust/speedwayr_arm > /dev/null &`
+
+  check_process "file_uploader_a"
+  [ $? -eq 0 ] && echo "$ts: ** Not running, restarting..." && `/cust/file_uploader_arm > /dev/null &`
+  sleep 10
+done

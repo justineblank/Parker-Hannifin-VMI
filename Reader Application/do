@@ -1,0 +1,7 @@
+make clean
+make
+cp config.json ./bin/config.json
+mkdir ./bin/json
+chmod 777 ./bin/json
+./bin/speedwayr_x86 10.10.10.251 &
+./bin/file_uploader_x86 &

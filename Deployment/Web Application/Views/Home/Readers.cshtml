@@ -1,0 +1,160 @@
+@{
+    ViewData["Title"] = "Readers Page";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/lib/dataTables/datatables.min.css" />
+}
+<div class="row  border-bottom white-bg dashboard-header">
+
+    <div class="col-sm-12 form-horizontal">
+        <div class="row" style="">
+            <label class="col-sm-1 control-label">
+                Reader ID
+            </label>
+            <div class="col-sm-4">
+                <select class="form-control" id="ddl_filter_readers">
+                    <option value="">Show All</option>
+                </select>
+            </div>
+            <div class="col-sm-7">
+                &nbsp;
+            </div>
+        </div>
+        <div class="row" style="min-height:300px;">
+            <div id="Readers" class="tab-pane active">
+                <div class="panel-body">
+                    <table id="Readers" class="display table table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Reader ID</th>
+                                <th>Location</th>
+                                <th>Last Seen</th>
+                                <th>id</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+@section Scripts {
+    <script src="~/lib/dataTables/datatables.min.js"></script>
+    <script type="text/javascript">
+        var editor;
+        $(function () {
+            var getUrl = window.location;
+            var b_Url = getUrl.protocol + "//" + getUrl.host;
+            if (getUrl.pathname.split('/')[1] != "") {
+                b_Url = b_Url + "/" + getUrl.pathname.split('/')[1];
+            }
+            var d_Data;
+            $.ajax({
+                url: b_Url + "/api/RFID/Readers",
+                type: 'GET',
+                success: function (data) {
+                    d_Data = data;
+                    var d_ddl_filter_readers = [];
+                    $.each(data, function (key, item) {
+                        var date_lastSeen = new Date(item["lastSeen"]);// mmddyyyyhhmmtt
+                        date_lastSeen = new Date(date_lastSeen.toLocaleString() + ' UTC');// mmddyyyyhhmmtt
+                        //
+                        $('table#Readers tbody').append(
+                            $("<tr></tr>")
+                                .append($("<td></td>").text(item["readerId"]))
+                                .append($("<td></td>").html(
+                                    '<label>' + item["location"] + '</label><i class="fa fa-pencil" />'
+                                    +
+                                    '<input type="text" value="' + item["location"] + '" style="display:none;" />'
+                                    +
+                                    '<input type="hidden" value="' + item["id"] + '"/>'
+                                )
+                                )
+                                .append($("<td></td>").text(date_lastSeen.mmddyyyyhhmmtt("/", ":")))
+                                .append($("<td></td>").text(item["id"]))
+                        );
+                        //
+                        if (d_ddl_filter_readers.indexOf(item["readerId"]) == -1) {
+                            d_ddl_filter_readers.push(item["readerId"]);
+                        }
+                    });
+                    d_ddl_filter_readers = d_ddl_filter_readers.sort();
+
+                    d_ddl_filter_readers.forEach(function (d) {
+                        $('#ddl_filter_readers').append('<option value="' + d + '">' + d + '</option>');
+                    });
+
+                    $('table#Readers').DataTable({
+                        "pageLength": 20,
+                        "order": [[2, "desc"]],
+                        "sort": false
+                    });
+                    var table = $('table#Readers').DataTable();
+                    table.column(3).visible(false);
+
+                    $('table#Readers').on('click', 'td i', function (e) {
+                        $(this).hide();
+                        $(this).parent().find('label').hide();
+                        $(this).parent().find('input[type="text"]').show();
+                        $(this).parent().find('input[type="text"]').focus();
+                    });
+                    $('table#Readers').on('blur', 'td input', function (e) {
+                        var cellTxt = $(this);
+                        $(this).hide();
+                        $(this).parent().find('label').show();
+                        $(this).parent().find('i').show();
+                        var id = $(this).parent().find('input[type="hidden"]').val();
+                        var location = $(this).val();
+                        var readerId = $(this).parent().parent().find('td:first').text();
+                        var settings = {
+                            "async": true,
+                            "crossDomain": true,
+                            "url": b_Url + "/api/RFID/ReadersEdit",
+                            "method": "POST",
+                            "headers": {
+                                "content-type": "application/json",
+                                "cache-control": "no-cache"
+                            },
+                            "processData": false,
+                            "data": "{\"id\": " + id + ",\"location\": \"" + location + "\",\"readerId\": \"" + readerId +"\"}"
+                        }
+
+                        $.ajax(settings).done(function (data) {
+                            if (data != undefined && data['location'] != null) {
+                                cellTxt.parent().find('label').text(data['location']);
+                                cellTxt.val(data['location']);                                
+                            }
+                        });                        
+                    });
+
+                    $.fn.dataTable.ext.search.push(
+                        function (settings, data, dataIndex) {
+                            var val = $('#ddl_filter_readers').val();
+                            var cell_val = data[0];
+                            //
+                            if (val == cell_val || val == "") {
+                                return true;
+                            }
+                            return false;
+                        }
+                    );
+
+                },
+                error: function () { /*alert('Failed!'); */ }
+            });
+            $('#ddl_filter_readers').change(function () {
+                var table = $('table#Readers').DataTable();
+                table.draw();
+            });
+
+        });
+    </script>
+}

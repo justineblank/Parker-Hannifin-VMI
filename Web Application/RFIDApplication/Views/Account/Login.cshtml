@@ -1,0 +1,67 @@
+﻿@model RFIDApplication.DAL.Models.LoginViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <environment names="Development">
+        <link rel="stylesheet" href="~/lib_bower/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/lib_bower/font-awesome/css/font-awesome.css" />
+        <link rel="stylesheet" href="~/css/animate.css" />
+        <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/lib_bower/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/lib_bower/font-awesome/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="~/css/animate.css" />
+        <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    </environment>
+</head>
+<body class="gray-bg">
+
+    <div class="middle-box text-center loginscreen  animated fadeInDown">
+        <div>
+            <div>
+
+                <h1 class="logo-name"><img src="~/images/blk_parkerlogo.png" /></h1>
+
+            </div>
+            <h3>Welcome</h3>
+            <p>Login in.</p>
+            <form class="m-t" role="form"  asp-controller="Account" asp-action="Login"  method="post">
+                <div class="form-group">
+                    <input type="text" asp-for="Username" class="form-control" placeholder="Username" required="">
+                </div>
+                <div class="form-group">
+                    <input type="password" asp-for="Password" class="form-control" placeholder="Password" required="">
+                </div>
+                <div class="form-group">
+                    <label asp-for="RememberMe" for="rememberme" class="col-md-6 control-label"></label>
+                    <div class="col-md-4">
+                        <input asp-for="RememberMe" type="checkbox" class="checkbox" id="rememberme" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    &nbsp;
+                </div>
+                    <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
+
+            </form>
+
+        </div>
+        <div id="">
+            <p class="m-t"> <small>Powered by EPI</small> </p>
+            <span class="clear">
+                <img src="~/images/400dpiLogoCropped.png" style="width: 150px;">
+            </span>
+        </div>
+    </div>
+    
+</body>
+</html>

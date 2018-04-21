@@ -1,0 +1,9 @@
+D:\Projects\RFID Bin Application\Source\RFIDApplication\RFIDApplication\RFIDApplication.DAL\bin\Debug\netcoreapp1.0\RFIDApplication.DAL.deps.json
+D:\Projects\RFID Bin Application\Source\RFIDApplication\RFIDApplication\RFIDApplication.DAL\bin\Debug\netcoreapp1.0\RFIDApplication.DAL.dll
+D:\Projects\RFID Bin Application\Source\RFIDApplication\RFIDApplication\RFIDApplication.DAL\bin\Debug\netcoreapp1.0\RFIDApplication.DAL.pdb
+D:\Projects\RFID Bin Application\Source\RFIDApplication\RFIDApplication\RFIDApplication.DAL\obj\Debug\netcoreapp1.0\RFIDApplication.DAL.csproj.CoreCompileInputs.cache
+D:\Projects\RFID Bin Application\Source\RFIDApplication\RFIDApplication\RFIDApplication.DAL\obj\Debug\netcoreapp1.0\RFIDApplication.DAL.AssemblyInfoInputs.cache
+D:\Projects\RFID Bin Application\Source\RFIDApplication\RFIDApplication\RFIDApplication.DAL\obj\Debug\netcoreapp1.0\RFIDApplication.DAL.AssemblyInfo.cs
+D:\Projects\RFID Bin Application\Source\RFIDApplication\RFIDApplication\RFIDApplication.DAL\obj\Debug\netcoreapp1.0\RFIDApplication.DAL.dll
+D:\Projects\RFID Bin Application\Source\RFIDApplication\RFIDApplication\RFIDApplication.DAL\obj\Debug\netcoreapp1.0\RFIDApplication.DAL.pdb
+D:\Projects\RFID Bin Application\Source\RFIDApplication\RFIDApplication\RFIDApplication.DAL\obj\Debug\netcoreapp1.0\RFIDApplication.DAL.csprojResolveAssemblyReference.cache
