@@ -5,129 +5,139 @@
 @section Styles {
     <link rel="stylesheet" href="~/lib/dataTables/datatables.min.css" />
 }
-<div class="row  border-bottom white-bg dashboard-header">
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="row  border-bottom white-bg dashboard-header">
 
-    <div class="col-sm-12 form-horizontal">
-        <div class="form-group">
-            <label class="col-sm-1 control-label">
-                Location
-            </label>
-            <div class="col-sm-4">
-                <select class="form-control" id="ddl_filter_Location">
-                    <option value="">Show All</option>
-                </select>
-            </div>
-            <div class="col-sm-1 control-label">
-                Last Seen
-            </div>
-            <div class="col-sm-6">
-                <label class="th-caption control-label right" id="lbl_value_LastSeen">
-
+        <div class="col-sm-12 form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-1 control-label">
+                    Location
                 </label>
-            </div>
+                <div class="col-sm-4">
+                    <select class="form-control" id="ddl_filter_Location">
+                        <option value="">Show All</option>
+                    </select>
+                </div>
+                <div class="col-sm-1 control-label">
+                    Last Seen
+                </div>
+                <div class="col-sm-6">
+                    <label class="th-caption control-label right" id="lbl_value_LastSeen">
 
-        </div>
-        <div class="hr-line-dashed"></div>
-        <div class="row" style="min-height:300px;">
-            <div id="Scans" class="tab-pane">
-                <div class="panel-body">
-                    <table id="Scans" class="display table table-striped table-bordered" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th>Time Stamp</th>
-                                <th>EPC</th>
-                                <th>Location</th>
-                                <th>Lastseen</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+                    </label>
+                </div>
+
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="row" style="min-height:300px;">
+                <div id="Scans" class="tab-pane">
+                    <div class="panel-body">
+                        <table id="Scans" class="display table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Time Stamp</th>
+                                    <th>EPC</th>
+                                    <th>Location</th>
+                                    <th>Lastseen</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 
-</div>
 
 
 
 
+    @section Scripts {
+        <script src="~/lib/dataTables/datatables.min.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                var getUrl = window.location;
+                var b_Url = getUrl.protocol + "//" + getUrl.host;
+                if (getUrl.pathname.split('/')[1] != "") {
+                    b_Url = b_Url + "/" + getUrl.pathname.split('/')[1];
+                }
 
-@section Scripts {
-    <script src="~/lib/dataTables/datatables.min.js"></script>
-    <script type="text/javascript">
-        $(function () {
-            var getUrl = window.location;
-            var b_Url = getUrl.protocol + "//" + getUrl.host;
-            if (getUrl.pathname.split('/')[1] != "") {
-                b_Url = b_Url + "/" + getUrl.pathname.split('/')[1];
-            }
-
-            $.ajax({
-                url: b_Url + "/api/RFID/Scans",
-                type: 'GET',
-                success: function (data) {
-                    var d_Location = [];
-                    var d_Timestamp = [];
-                    $.each(data, function (key, item) {
-                        var date_timestamp = new Date(item["timestamp"]);// mmddyyyyhhmmtt
-                        date_timestamp = new Date(date_timestamp.toLocaleString() + ' UTC');
-                        var date_lastSeen = new Date(item["lastSeen"]);// mmddyyyyhhmmtt
-                        date_lastSeen = new Date(date_lastSeen.toLocaleString() + ' UTC');
-                        //
-                        var col_Location = item["location"];
-                        if (col_Location == "") {
-                            col_Location = item["readerId"];
-                        }
-                        //
-                        $('table#Scans tbody').append(
-                            $("<tr></tr>")
-                                .append($("<td></td>").text(date_timestamp.mmddyyyyhhmmtt("/", ":")))
-                                .append($("<td></td>").text(item["epc"]))
-                                .append($("<td></td>").text(col_Location))
-                                .append($("<td></td>").text(date_lastSeen.mmddyyyyhhmmtt("/", ":")))
-                        );
-                        //
-                        if (d_Location.indexOf(col_Location) == -1) {
-                            d_Location.push(col_Location);
-                        }
-                    });
-                    d_Location = d_Location.sort();
-                    d_Location.forEach(function (d) {
-                        $('#ddl_filter_Location').append('<option value="' + d + '">' + d + '</option>');
-                    });
-                    $('table#Scans').DataTable({
-                        "pageLength": 20,
-                        "order": [[0, "desc"]],
-                        "sort": false
-                    });
-                    var table = $('table#Scans').DataTable();
-                    table.column(3).visible(false);
-
-                    $.fn.dataTable.ext.search.push(
-                        function (settings, data, dataIndex) {
-                            var val = $('#ddl_filter_Location').val();
-                            var cell_val = data[2];                            
+                $.ajax({
+                    url: b_Url + "/api/RFID/Scans",
+                    type: 'GET',
+                    success: function (data) {
+                        var d_Location = [];
+                        var d_Timestamp = [];
+                        $.each(data, function (key, item) {
+                            var date_timestamp = new Date(item["timestamp"]);// mmddyyyyhhmmtt
+                            date_timestamp = new Date(date_timestamp.toLocaleString() + ' UTC');
+                            var date_lastSeen = new Date(item["lastSeen"]);// mmddyyyyhhmmtt
+                            date_lastSeen = new Date(date_lastSeen.toLocaleString() + ' UTC');
                             //
-                            if (val == cell_val) {
-                                $('#lbl_value_LastSeen').text(data[3]);
-                                return true;
+                            var col_Location = item["location"];
+                            if (col_Location == "") {
+                                col_Location = item["readerId"];
                             }
-                            if (val == "") {
-                                $('#lbl_value_LastSeen').text('');
-                                return true;
+                            //
+                            $('table#Scans tbody').append(
+                                $("<tr></tr>")
+                                    .append($("<td></td>").text(date_timestamp.mmddyyyyhhmmtt("/", ":")))
+                                    .append($("<td></td>").text(item["epc"]))
+                                    .append($("<td></td>").text(col_Location))
+                                    .append($("<td></td>").text(date_lastSeen.mmddyyyyhhmmtt("/", ":")))
+                            );
+                            //
+                            if (d_Location.indexOf(col_Location) == -1) {
+                                d_Location.push(col_Location);
                             }
-                            return false;
-                        }
-                    );
-                },
-                error: function () { /*alert('Failed!'); */ }
-            });
+                        });
+                        d_Location = d_Location.sort();
+                        d_Location.forEach(function (d) {
+                            $('#ddl_filter_Location').append('<option value="' + d + '">' + d + '</option>');
+                        });
+                        $('table#Scans').DataTable({
+                            "pageLength": 20,
+                            "order": [[0, "desc"]],
+                            "sort": false
+                        });
+                        var table = $('table#Scans').DataTable();
+                        table.column(3).visible(false);
 
-            $('#ddl_filter_Location').change(function () {
-                var table = $('table#Scans').DataTable();
-                table.draw();
+                        $.fn.dataTable.ext.search.push(
+                            function (settings, data, dataIndex) {
+                                var val = $('#ddl_filter_Location').val();
+                                var cell_val = data[2];
+                                //
+                                if (val == cell_val) {
+                                    $('#lbl_value_LastSeen').text(data[3]);
+                                    return true;
+                                }
+                                if (val == "") {
+                                    $('#lbl_value_LastSeen').text('');
+                                    return true;
+                                }
+                                return false;
+                            }
+                        );
+                    },
+                    error: function () { /*alert('Failed!'); */ }
+                });
+
+                $('#ddl_filter_Location').change(function () {
+                    var table = $('table#Scans').DataTable();
+                    table.draw();
+                });
             });
-        });
+        </script>
+    }
+
+}
+else
+{
+    <script>
+    window.location = '@Url.Action("Login", "Account")';
     </script>
 }

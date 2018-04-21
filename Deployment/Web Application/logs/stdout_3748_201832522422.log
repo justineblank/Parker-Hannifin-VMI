@@ -1,0 +1,8 @@
+Hosting environment: Production
+Content root path: C:\inetpub\wwwroot\RFIDApplication
+Now listening on: http://localhost:25357/rfidapplication
+Application started. Press Ctrl+C to shut down.
+warn: Microsoft.Extensions.DependencyInjection.DataProtectionServices[59]
+      Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+warn: Microsoft.AspNetCore.DataProtection.Repositories.EphemeralXmlRepository[50]
+      Using an in-memory repository. Keys will not be persisted to storage.

@@ -1,0 +1,5 @@
+It was not possible to find any compatible framework version
+The specified framework 'Microsoft.NETCore.App', version '1.1.2' was not found.
+  - Check application dependencies and target a framework version installed at:
+      \
+  - Alternatively, install the framework version '1.1.2'.

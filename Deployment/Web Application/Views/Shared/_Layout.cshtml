@@ -34,7 +34,6 @@
 
 </head>
 <body>
-
     <!-- Wrapper-->
     <div id="wrapper" class="@Html.PageClass()">
 
@@ -78,9 +77,15 @@
         <script src="~/lib_bower/pace/pace.min.js"></script>
         <script src="~/lib_bower/slimScroll/jquery.slimscroll.min.js"></script>
         <script src="~/js/script.js" asp-append-version="true"></script>
-        <script src="~/js/site.js"></script>
+        <script src="~/js/site.js?201803201113"></script>
     </environment>
 
-    @RenderSection("scripts", required: false)
+    @if (IsSectionDefined("scripts"))
+    {
+        RenderSection("scripts");
+    }
+
+
+
 </body>
 </html>
